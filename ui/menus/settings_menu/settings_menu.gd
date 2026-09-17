@@ -8,10 +8,13 @@ extends Control
 ##   3) aplicar efectos en vivo (volumen general, modo de ventana)
 ##   4) guardar / cargar / restablecer valores
 ##   5) volver al menú principal
+##   6) animaciones de entrada, transición entre categorías y glow
 
 const MAIN_MENU_PATH := "res://ui/menus/main_menu/menu.tscn"
 const SAVE_PATH := "user://settings.cfg"
 const SAVE_SECTION := "settings"
+const HOVER_SFX_PATH := "res://assets/audio/sfx/ui/Cursor.wav"
+const CLICK_SFX_PATH := "res://assets/audio/sfx/ui/Decide_2.wav"
 
 @onready var _search: LineEdit = $Root/Layout/TopBar/SearchField
 @onready var _reset_button: Button = $Root/Layout/TopBar/ResetButton
@@ -37,9 +40,18 @@ const SAVE_SECTION := "settings"
 var _pages: Array = []
 var _category_buttons: Array = []
 var _default_snapshot: Dictionary = {}
+var _page_tween: Tween = null
+var _glow_tween: Tween = null
+var _current_glow_btn: Button = null
+var _hover_player: AudioStreamPlayer
+var _click_player: AudioStreamPlayer
+var _last_hover_time: int = 0
+var _last_click_time: int = 0
 
 
 func _ready() -> void:
+	_setup_audio()
+	_connect_buttons()
 	_pages = [_page_display, _page_sound, _page_game]
 	_category_buttons = [_cat_display, _cat_sound, _cat_game]
 	for i in _category_buttons.size():
@@ -50,25 +62,177 @@ func _ready() -> void:
 	_done_button.pressed.connect(_on_done_pressed)
 	if _fps_row:
 		_fps_row.special_labels = {240.0: "Sin límite"}
-	_show_page(0)
+	_show_page(0, false)
 	_store_defaults()
 	_load_settings()
 	_apply_live_effects()
+	_animate_entry()
+
+
+# ─── Animaciones de entrada ─────────────────────────────────────────────────
+
+func _animate_entry() -> void:
+	var panels: Array[PanelContainer] = []
+	for page in _pages:
+		for child in page.get_children():
+			if child is PanelContainer:
+				panels.append(child)
+	# Sidebar fade-in
+	for cat_btn in _category_buttons:
+		cat_btn.modulate.a = 0.0
+		var tw := create_tween()
+		tw.tween_property(cat_btn, "modulate:a", 1.0, 0.3)
+		tw.set_parallel(false)
+	# Panels fade-in staggered (no position — VBoxContainer handles layout)
+	for i in panels.size():
+		panels[i].modulate.a = 0.0
+		var tw := create_tween()
+		tw.tween_interval(0.1 + i * 0.06)
+		tw.tween_property(panels[i], "modulate:a", 1.0, 0.25)
+	# Bottom bar fade-in
+	var bottom_bar := $Root/Layout/BottomBar
+	bottom_bar.modulate.a = 0.0
+	var tw_b := create_tween()
+	tw_b.tween_interval(0.4)
+	tw_b.tween_property(bottom_bar, "modulate:a", 1.0, 0.3)
+
+
+# ─── Audio ──────────────────────────────────────────────────────────────────
+
+func _setup_audio() -> void:
+	_hover_player = AudioStreamPlayer.new()
+	_hover_player.stream = preload(HOVER_SFX_PATH)
+	_hover_player.volume_db = -10
+	_hover_player.max_polyphony = 4
+	add_child(_hover_player)
+
+	_click_player = AudioStreamPlayer.new()
+	_click_player.stream = preload(CLICK_SFX_PATH)
+	_click_player.volume_db = -10
+	add_child(_click_player)
+
+
+func _connect_buttons() -> void:
+	var all_buttons: Array[Button] = [
+		_reset_button, _apply_button, _done_button,
+		_cat_display, _cat_sound, _cat_game,
+	]
+	for btn in all_buttons:
+		btn.mouse_entered.connect(_on_button_hover.bind(btn))
+		btn.pressed.connect(_on_button_click)
+	# Conectar widgets de opciones (ValueButton, CheckBox, Slider) en todas las páginas
+	_connect_option_widgets()
+
+
+func _connect_option_widgets() -> void:
+	for page in _pages:
+		_connect_widgets_recursive(page)
+
+
+func _connect_widgets_recursive(node: Node) -> void:
+	for child in node.get_children():
+		if child is Button and child.name == "ValueButton":
+			child.mouse_entered.connect(_on_button_hover.bind(child))
+			child.pressed.connect(_on_button_click)
+		elif child is CheckBox:
+			child.pressed.connect(_on_button_click)
+		elif child is HSlider:
+			child.value_changed.connect(_on_slider_changed)
+		_connect_widgets_recursive(child)
+
+
+func _on_slider_changed(_value: float) -> void:
+	_click_player.play()
+
+
+func _on_button_hover(_btn: Button) -> void:
+	var now := Time.get_ticks_msec()
+	if now - _last_hover_time > 150:
+		_hover_player.play()
+		_last_hover_time = now
+
+
+func _on_button_click() -> void:
+	var now := Time.get_ticks_msec()
+	if now - _last_click_time > 150:
+		_click_player.play()
+		_last_click_time = now
 
 
 # ─── Categorías (sidebar → página) ──────────────────────────────────────────
 
 func _on_category_toggled(pressed: bool, index: int) -> void:
 	if pressed:
-		_show_page(index)
+		_show_page(index, true)
 
 
-func _show_page(index: int) -> void:
+func _show_page(index: int, animate: bool = true) -> void:
+	var old_page := -1
 	for i in _pages.size():
-		_pages[i].visible = (i == index)
+		if _pages[i].visible:
+			old_page = i
+			break
+	if old_page == index:
+		return
+	_stop_glow()
+	if animate and old_page >= 0:
+		_crossfade_pages(old_page, index)
+	else:
+		for i in _pages.size():
+			_pages[i].visible = (i == index)
 	if _search:
 		_search.text = ""
 	_on_search_text_changed("")
+	if animate:
+		_start_glow(_category_buttons[index])
+
+
+func _crossfade_pages(old_idx: int, new_idx: int) -> void:
+	if _page_tween and _page_tween.is_valid():
+		_page_tween.kill()
+	var old_page: VBoxContainer = _pages[old_idx]
+	var new_page: VBoxContainer = _pages[new_idx]
+	# Fade out old
+	_page_tween = create_tween().set_parallel(true)
+	_page_tween.tween_property(old_page, "modulate:a", 0.0, 0.12).set_trans(Tween.TRANS_QUAD)
+	_page_tween.chain().tween_callback(func():
+		old_page.visible = false
+		old_page.modulate.a = 1.0
+		# Show and fade in new
+		new_page.visible = true
+		new_page.modulate.a = 0.0
+		var tw := create_tween()
+		tw.tween_property(new_page, "modulate:a", 1.0, 0.18).set_trans(Tween.TRANS_QUAD)
+	)
+
+
+# ─── Glow en categoría activa ───────────────────────────────────────────────
+
+func _start_glow(btn: Button) -> void:
+	_current_glow_btn = btn
+	var style: StyleBoxFlat = btn.get_theme_stylebox("pressed").duplicate() as StyleBoxFlat
+	if style == null:
+		return
+	var base_color := style.border_color
+	_glow_tween = create_tween().set_loops()
+	_glow_tween.tween_property(style, "border_color:a", 0.4, 0.7).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	_glow_tween.tween_property(style, "border_color:a", 1.0, 0.7).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	style.border_color = base_color
+	btn.add_theme_stylebox_override("pressed", style)
+	btn.add_theme_stylebox_override("hover_pressed", style)
+
+
+func _stop_glow() -> void:
+	if _glow_tween and _glow_tween.is_valid():
+		_glow_tween.kill()
+		_glow_tween = null
+	if _current_glow_btn and is_instance_valid(_current_glow_btn):
+		var style: StyleBoxFlat = _current_glow_btn.get_theme_stylebox("pressed").duplicate() as StyleBoxFlat
+		if style:
+			style.border_color.a = 1.0
+			_current_glow_btn.add_theme_stylebox_override("pressed", style)
+			_current_glow_btn.add_theme_stylebox_override("hover_pressed", style)
+	_current_glow_btn = null
 
 
 # ─── Búsqueda ───────────────────────────────────────────────────────────────

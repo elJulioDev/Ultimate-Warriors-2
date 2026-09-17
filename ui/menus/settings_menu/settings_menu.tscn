@@ -93,6 +93,56 @@ corner_radius_bottom_left = 3
 
 [sub_resource type="StyleBoxEmpty" id="sb_focus_none"]
 
+[sub_resource type="StyleBoxFlat" id="sb_orange_normal"]
+content_margin_top = 6.0
+content_margin_bottom = 6.0
+bg_color = Color(0, 0, 0, 0.8235294)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+shadow_color = Color(0, 0, 0, 0.23529412)
+shadow_size = 5
+
+[sub_resource type="StyleBoxFlat" id="sb_orange_hover"]
+bg_color = Color(0.99, 0.55341, 0.019799981, 0.9019608)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+shadow_size = 5
+
+[sub_resource type="StyleBoxFlat" id="sb_orange_pressed"]
+bg_color = Color(0.98803645, 0.73403823, 0.025840001, 0.90200007)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+shadow_size = 5
+
+[sub_resource type="StyleBoxFlat" id="sb_reset_hover"]
+bg_color = Color(0.99, 0.55341, 0.019799981, 0.9019608)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+shadow_size = 5
+
 [sub_resource type="StyleBoxFlat" id="sb_cat_normal"]
 bg_color = Color(0, 0, 0, 0.55)
 border_width_left = 1
@@ -239,10 +289,11 @@ mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
 theme_override_fonts/font = ExtResource("4_font")
-theme_override_font_sizes/font_size = 18
-theme_override_styles/normal = SubResource("sb_topbtn_normal")
-theme_override_styles/pressed = SubResource("sb_topbtn_pressed")
-theme_override_styles/hover = SubResource("sb_topbtn_hover")
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("sb_cat_normal")
+theme_override_styles/hover = SubResource("sb_cat_hover")
+theme_override_styles/pressed = SubResource("sb_cat_selected")
+theme_override_styles/hover_pressed = SubResource("sb_cat_selected")
 theme_override_styles/focus = SubResource("sb_focus_none")
 text = "Restablecer"
 
@@ -907,12 +958,12 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 14
 
-[node name="PanelLanguage" type="PanelContainer" parent="Root/Layout/MainArea/OptionsScroll/Pages/PageGame" unique_id=887914655]
+[node name="PanelIdioma" type="PanelContainer" parent="Root/Layout/MainArea/OptionsScroll/Pages/PageGame" unique_id=887914655]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("sb_panel")
 
-[node name="RowLanguage" type="HBoxContainer" parent="Root/Layout/MainArea/OptionsScroll/Pages/PageGame/PanelLanguage" unique_id=2041875592]
+[node name="RowLanguage" type="HBoxContainer" parent="Root/Layout/MainArea/OptionsScroll/Pages/PageGame/PanelIdioma" unique_id=2041875592]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -921,7 +972,7 @@ script = ExtResource("3_cycle_script")
 label_text = "Idioma"
 options = Array[String](["Español", "English"])
 
-[node name="Label" type="Label" parent="Root/Layout/MainArea/OptionsScroll/Pages/PageGame/PanelLanguage/RowLanguage" unique_id=1898600130]
+[node name="Label" type="Label" parent="Root/Layout/MainArea/OptionsScroll/Pages/PageGame/PanelIdioma/RowLanguage" unique_id=1898600130]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(1, 1, 1, 1)
@@ -930,7 +981,7 @@ theme_override_font_sizes/font_size = 18
 text = "Idioma"
 vertical_alignment = 1
 
-[node name="ValueButton" type="Button" parent="Root/Layout/MainArea/OptionsScroll/Pages/PageGame/PanelLanguage/RowLanguage" unique_id=271175257]
+[node name="ValueButton" type="Button" parent="Root/Layout/MainArea/OptionsScroll/Pages/PageGame/PanelIdioma/RowLanguage" unique_id=271175257]
 layout_mode = 2
 size_flags_vertical = 4
 focus_mode = 0
@@ -943,50 +994,12 @@ text = "Español"
 flat = true
 alignment = 2
 
-[node name="PanelGameCycles" type="PanelContainer" parent="Root/Layout/MainArea/OptionsScroll/Pages/PageGame" unique_id=646150137]
+[node name="PanelPartida" type="PanelContainer" parent="Root/Layout/MainArea/OptionsScroll/Pages/PageGame" unique_id=646150137]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("sb_panel")
 
-[node name="VBox" type="VBoxContainer" parent="Root/Layout/MainArea/OptionsScroll/Pages/PageGame/PanelGameCycles" unique_id=994304116]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 10
-
-[node name="RowAIDifficulty" type="HBoxContainer" parent="Root/Layout/MainArea/OptionsScroll/Pages/PageGame/PanelGameCycles/VBox" unique_id=534041092]
-custom_minimum_size = Vector2(0, 30)
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 14
-script = ExtResource("3_cycle_script")
-label_text = "Dificultad de la IA"
-options = Array[String](["Fácil", "Normal", "Difícil", "Muy Difícil"])
-option_colors = Array[Color]([Color(0.4, 0.9, 0.4, 1), Color(1, 1, 1, 1), Color(1, 0.75, 0.2, 1), Color(1, 0.35, 0.35, 1)])
-selected_index = 1
-
-[node name="Label" type="Label" parent="Root/Layout/MainArea/OptionsScroll/Pages/PageGame/PanelGameCycles/VBox/RowAIDifficulty" unique_id=2119606256]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("4_font")
-theme_override_font_sizes/font_size = 18
-text = "Dificultad de la IA"
-vertical_alignment = 1
-
-[node name="ValueButton" type="Button" parent="Root/Layout/MainArea/OptionsScroll/Pages/PageGame/PanelGameCycles/VBox/RowAIDifficulty" unique_id=340727603]
-layout_mode = 2
-size_flags_vertical = 4
-focus_mode = 0
-mouse_default_cursor_shape = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("9_sxuvl")
-theme_override_font_sizes/font_size = 18
-text = "Normal"
-flat = true
-alignment = 2
-
-[node name="RowRoundTime" type="HBoxContainer" parent="Root/Layout/MainArea/OptionsScroll/Pages/PageGame/PanelGameCycles/VBox" unique_id=571437859]
+[node name="RowRoundTime" type="HBoxContainer" parent="Root/Layout/MainArea/OptionsScroll/Pages/PageGame/PanelPartida" unique_id=571437859]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -996,7 +1009,7 @@ label_text = "Duración de Ronda"
 options = Array[String](["60s", "90s", "120s", "Sin límite"])
 selected_index = 1
 
-[node name="Label" type="Label" parent="Root/Layout/MainArea/OptionsScroll/Pages/PageGame/PanelGameCycles/VBox/RowRoundTime" unique_id=776927576]
+[node name="Label" type="Label" parent="Root/Layout/MainArea/OptionsScroll/Pages/PageGame/PanelPartida/RowRoundTime" unique_id=776927576]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(1, 1, 1, 1)
@@ -1005,7 +1018,7 @@ theme_override_font_sizes/font_size = 18
 text = "Duración de Ronda"
 vertical_alignment = 1
 
-[node name="ValueButton" type="Button" parent="Root/Layout/MainArea/OptionsScroll/Pages/PageGame/PanelGameCycles/VBox/RowRoundTime" unique_id=1736992506]
+[node name="ValueButton" type="Button" parent="Root/Layout/MainArea/OptionsScroll/Pages/PageGame/PanelPartida/RowRoundTime" unique_id=1736992506]
 layout_mode = 2
 size_flags_vertical = 4
 focus_mode = 0
@@ -1018,23 +1031,61 @@ text = "90s"
 flat = true
 alignment = 2
 
-[node name="PanelGameToggles" type="PanelContainer" parent="Root/Layout/MainArea/OptionsScroll/Pages/PageGame" unique_id=1615855603]
+[node name="PanelCombate" type="PanelContainer" parent="Root/Layout/MainArea/OptionsScroll/Pages/PageGame" unique_id=534041093]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("sb_panel")
 
-[node name="VBox" type="VBoxContainer" parent="Root/Layout/MainArea/OptionsScroll/Pages/PageGame/PanelGameToggles" unique_id=632743925]
+[node name="RowAIDifficulty" type="HBoxContainer" parent="Root/Layout/MainArea/OptionsScroll/Pages/PageGame/PanelCombate" unique_id=534041092]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 14
+script = ExtResource("3_cycle_script")
+label_text = "Dificultad de la IA"
+options = Array[String](["Fácil", "Normal", "Difícil", "Muy Difícil"])
+option_colors = Array[Color]([Color(0.4, 0.9, 0.4, 1), Color(1, 1, 1, 1), Color(1, 0.75, 0.2, 1), Color(1, 0.35, 0.35, 1)])
+selected_index = 1
+
+[node name="Label" type="Label" parent="Root/Layout/MainArea/OptionsScroll/Pages/PageGame/PanelCombate/RowAIDifficulty" unique_id=2119606256]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 18
+text = "Dificultad de la IA"
+vertical_alignment = 1
+
+[node name="ValueButton" type="Button" parent="Root/Layout/MainArea/OptionsScroll/Pages/PageGame/PanelCombate/RowAIDifficulty" unique_id=340727603]
+layout_mode = 2
+size_flags_vertical = 4
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("9_sxuvl")
+theme_override_font_sizes/font_size = 18
+text = "Normal"
+flat = true
+alignment = 2
+
+[node name="PanelInterfaz" type="PanelContainer" parent="Root/Layout/MainArea/OptionsScroll/Pages/PageGame" unique_id=1615855603]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("sb_panel")
+
+[node name="VBox" type="VBoxContainer" parent="Root/Layout/MainArea/OptionsScroll/Pages/PageGame/PanelInterfaz" unique_id=632743925]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 8
 
-[node name="RowDamageNumbers" type="HBoxContainer" parent="Root/Layout/MainArea/OptionsScroll/Pages/PageGame/PanelGameToggles/VBox" unique_id=1940037272]
+[node name="RowDamageNumbers" type="HBoxContainer" parent="Root/Layout/MainArea/OptionsScroll/Pages/PageGame/PanelInterfaz/VBox" unique_id=1940037272]
 custom_minimum_size = Vector2(0, 28)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 14
 
-[node name="Label" type="Label" parent="Root/Layout/MainArea/OptionsScroll/Pages/PageGame/PanelGameToggles/VBox/RowDamageNumbers" unique_id=51122283]
+[node name="Label" type="Label" parent="Root/Layout/MainArea/OptionsScroll/Pages/PageGame/PanelInterfaz/VBox/RowDamageNumbers" unique_id=51122283]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(1, 1, 1, 1)
@@ -1043,19 +1094,19 @@ theme_override_font_sizes/font_size = 18
 text = "Números de Daño"
 vertical_alignment = 1
 
-[node name="Check" type="CheckBox" parent="Root/Layout/MainArea/OptionsScroll/Pages/PageGame/PanelGameToggles/VBox/RowDamageNumbers" unique_id=129745990]
+[node name="Check" type="CheckBox" parent="Root/Layout/MainArea/OptionsScroll/Pages/PageGame/PanelInterfaz/VBox/RowDamageNumbers" unique_id=129745990]
 layout_mode = 2
 size_flags_vertical = 4
 focus_mode = 0
 button_pressed = true
 
-[node name="RowControllerVibration" type="HBoxContainer" parent="Root/Layout/MainArea/OptionsScroll/Pages/PageGame/PanelGameToggles/VBox" unique_id=1081625900]
+[node name="RowControllerVibration" type="HBoxContainer" parent="Root/Layout/MainArea/OptionsScroll/Pages/PageGame/PanelInterfaz/VBox" unique_id=1081625900]
 custom_minimum_size = Vector2(0, 28)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 14
 
-[node name="Label" type="Label" parent="Root/Layout/MainArea/OptionsScroll/Pages/PageGame/PanelGameToggles/VBox/RowControllerVibration" unique_id=950302203]
+[node name="Label" type="Label" parent="Root/Layout/MainArea/OptionsScroll/Pages/PageGame/PanelInterfaz/VBox/RowControllerVibration" unique_id=950302203]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(1, 1, 1, 1)
@@ -1064,35 +1115,53 @@ theme_override_font_sizes/font_size = 18
 text = "Vibración del Mando"
 vertical_alignment = 1
 
-[node name="Check" type="CheckBox" parent="Root/Layout/MainArea/OptionsScroll/Pages/PageGame/PanelGameToggles/VBox/RowControllerVibration" unique_id=100167227]
+[node name="Check" type="CheckBox" parent="Root/Layout/MainArea/OptionsScroll/Pages/PageGame/PanelInterfaz/VBox/RowControllerVibration" unique_id=100167227]
 layout_mode = 2
 size_flags_vertical = 4
 focus_mode = 0
 button_pressed = true
 
-[node name="RowConfirmExit" type="HBoxContainer" parent="Root/Layout/MainArea/OptionsScroll/Pages/PageGame/PanelGameToggles/VBox" unique_id=755631420]
-custom_minimum_size = Vector2(0, 28)
+[node name="PanelControles" type="PanelContainer" parent="Root/Layout/MainArea/OptionsScroll/Pages/PageGame" unique_id=987654321]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("sb_panel")
+
+[node name="RowShowControls" type="HBoxContainer" parent="Root/Layout/MainArea/OptionsScroll/Pages/PageGame/PanelControles" unique_id=876543210]
+custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 14
 
-[node name="Label" type="Label" parent="Root/Layout/MainArea/OptionsScroll/Pages/PageGame/PanelGameToggles/VBox/RowConfirmExit" unique_id=366517904]
+[node name="Label" type="Label" parent="Root/Layout/MainArea/OptionsScroll/Pages/PageGame/PanelControles/RowShowControls" unique_id=765432109]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_fonts/font = ExtResource("4_font")
 theme_override_font_sizes/font_size = 18
-text = "Confirmar antes de Salir"
+text = "Ver controles del juego"
 vertical_alignment = 1
 
-[node name="Check" type="CheckBox" parent="Root/Layout/MainArea/OptionsScroll/Pages/PageGame/PanelGameToggles/VBox/RowConfirmExit" unique_id=1149965258]
+[node name="ControlsButton" type="Button" parent="Root/Layout/MainArea/OptionsScroll/Pages/PageGame/PanelControles/RowShowControls" unique_id=654321098]
 layout_mode = 2
 size_flags_vertical = 4
 focus_mode = 0
-button_pressed = true
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("sb_orange_normal")
+theme_override_styles/hover = SubResource("sb_orange_hover")
+theme_override_styles/pressed = SubResource("sb_orange_pressed")
+theme_override_styles/focus = SubResource("sb_focus_none")
+text = "Ver controles"
+flat = true
+alignment = 2
 
 [node name="BottomBar" type="HBoxContainer" parent="Root/Layout" unique_id=333941360]
-custom_minimum_size = Vector2(0, 44)
+custom_minimum_size = Vector2(0, 38)
 layout_mode = 2
 theme_override_constants/separation = 14
 
@@ -1102,31 +1171,35 @@ size_flags_horizontal = 3
 mouse_filter = 2
 
 [node name="ApplyButton" type="Button" parent="Root/Layout/BottomBar" unique_id=377667278]
-custom_minimum_size = Vector2(160, 40)
+custom_minimum_size = Vector2(160, 32)
 layout_mode = 2
 size_flags_vertical = 4
 mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
 theme_override_fonts/font = ExtResource("4_font")
-theme_override_font_sizes/font_size = 18
-theme_override_styles/normal = SubResource("sb_topbtn_normal")
-theme_override_styles/pressed = SubResource("sb_topbtn_pressed")
-theme_override_styles/hover = SubResource("sb_topbtn_hover")
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("sb_orange_normal")
+theme_override_styles/hover = SubResource("sb_orange_hover")
+theme_override_styles/pressed = SubResource("sb_orange_pressed")
 theme_override_styles/focus = SubResource("sb_focus_none")
 text = "Aplicar"
 
 [node name="DoneButton" type="Button" parent="Root/Layout/BottomBar" unique_id=1054268307]
-custom_minimum_size = Vector2(160, 40)
+custom_minimum_size = Vector2(160, 32)
 layout_mode = 2
 size_flags_vertical = 4
 mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
 theme_override_fonts/font = ExtResource("4_font")
-theme_override_font_sizes/font_size = 18
-theme_override_styles/normal = SubResource("sb_topbtn_normal")
-theme_override_styles/pressed = SubResource("sb_topbtn_pressed")
-theme_override_styles/hover = SubResource("sb_topbtn_hover")
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("sb_orange_normal")
+theme_override_styles/hover = SubResource("sb_orange_hover")
+theme_override_styles/pressed = SubResource("sb_orange_pressed")
 theme_override_styles/focus = SubResource("sb_focus_none")
 text = "Listo"

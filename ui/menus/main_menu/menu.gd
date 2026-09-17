@@ -149,7 +149,11 @@ func _on_play_pressed():
 		get_tree().change_scene_to_file("res://ui/menus/character_select/character_select.tscn"))
 
 func _on_settings_pressed():
-	pass
+	if _busy:
+		return
+	_set_busy(true)
+	TransitionManager.transition(0.5, 0.3, 0.5, func():
+		get_tree().change_scene_to_file("res://ui/menus/settings_menu/settings_menu.tscn"))
 
 func _on_exit_pressed():
 	if _busy:
