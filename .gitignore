@@ -2,6 +2,7 @@
 # Godot 4+ específicos
 # ==========================================
 .godot/
+.codebase-memory/
 
 # ==========================================
 # Exportaciones y Builds (Ejecutables)
