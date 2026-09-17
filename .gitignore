@@ -54,3 +54,5 @@ Desktop.ini
 # ==========================================
 AGENTS.md
 docs/*
+opencode.json
+.opencode/*
