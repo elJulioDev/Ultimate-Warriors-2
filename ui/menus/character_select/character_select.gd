@@ -62,4 +62,5 @@ func _on_fight_pressed() -> void:
 
 
 func _on_back_pressed() -> void:
-	get_tree().change_scene_to_file(MAIN_MENU_PATH)
+	TransitionManager.transition(0.5, 0.3, 0.5, func():
+		get_tree().change_scene_to_file(MAIN_MENU_PATH))
